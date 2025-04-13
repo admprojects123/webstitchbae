@@ -1,1 +1,1 @@
-exports.domain = 'https://clouthing-ecommerce-backend.vercel.app';
+exports.domain = 'https://stitch-commerce-admaya.vercel.app';
