@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginForm.css';
 import { domain } from '../../api.service';
-import axios from 'axios'; // Ensure Axios is installed: npm install axios
+import axios from 'axios';
 import { useAlert } from '../../component/alert_popup/AlertContext';
+import loginimage from '../../asset/loginpagestitch.PNG';
+
 const LoginForm = () => {
   const navigate = useNavigate();
-    const alertContext=useAlert()
+  const alertContext = useAlert();
+
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,8 +19,6 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(`${domain}/user/login`, { email });
-
-      // Display API response to the user
       alertContext.showAlert(`OTP sent successfully to ${response.data.data.email}`);
       navigate('/verify', { state: { email: email } });
       console.log('Response:', response.data);
@@ -32,32 +33,39 @@ const LoginForm = () => {
 
   return (
     <div className="login-container">
-      <div className="login-content">
-        <h2>Login</h2>
-        <p style={{ fontWeight: 600, color: 'black' }}>Log In to Save Your Favorite Kurtis</p>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <input
-              type="email"
-              id="email"
-              value={email}
-              placeholder="Enter your email"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? 'Sending...' : 'Continue'}
-          </button>
-        </form>
+      <div className="login-wrapper">
+        {/* Left Side - Image */}
+        <div className="login-image">
+          <img src={loginimage} alt="Login Visual" />
+        </div>
 
-        {/* Register Link */}
-        <p className="register-link">
-          Don't have an account?{' '}
-          <span onClick={() => navigate('/register')} className="register-text">
-            Register
-          </span>
-        </p>
+        {/* Right Side - Login Form */}
+        <div className="login-content">
+          <h2>Login</h2>
+          <p style={{ fontWeight: 600, color: 'black' }}>Log In to Save Your Fashion</p>
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <input
+                type="email"
+                id="email"
+                value={email}
+                placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? 'Sending...' : 'Continue'}
+            </button>
+          </form>
+
+          <p className="register-link">
+            Don't have an account?{' '}
+            <span onClick={() => navigate('/register')} className="register-text">
+              Register
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );
