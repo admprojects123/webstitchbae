@@ -81,8 +81,9 @@ body {
   }
   
   .product-name {
-    font-weight: bolder;
-    font-family: 'Prompt', sans-serif;
+    font-weight:200;
+    font-family: 'DM Sans', sans-serif;
+    color:#374151;
   }
   
   .product-info {

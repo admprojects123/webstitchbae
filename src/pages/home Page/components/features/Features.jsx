@@ -1,26 +1,36 @@
-// Features.jsx
 import React from 'react';
 import './Features.css';
-import { Icon } from '@iconify/react';
 
 const Features = () => {
   return (
     <div className="features-container">
       <div className="features-content">
         <div className="feature">
-          <Icon icon="streamline:shipping-truck" className="feature-icon"/> {/* Replace with your actual icon */}
-          <h3 className="feature-title">Fast & Free Shipping</h3>
-          <p className="feature-description">We offer free shipping on all orders</p>
+          <div className="feature-number">1.</div>
+          <div className="feature-text">
+            <h3 className="feature-title">Trendy Designs</h3>
+            <p className="feature-description">
+              Stay ahead in fashion with our exclusive, trendsetting collections tailored to make you stand out
+            </p>
+          </div>
         </div>
         <div className="feature">
-          <Icon icon="tabler:truck-return" className="feature-icon"/> {/* Replace with your actual icon */}
-          <h3 className="feature-title">Easy Exchange</h3>
-          <p className="feature-description">7 day easy exchange with all tag tucked in article</p>
+          <div className="feature-number">2.</div>
+          <div className="feature-text">
+            <h3 className="feature-title">Premium Quality</h3>
+            <p className="feature-description">
+              Enjoy unmatched comfort and durability with our carefully curated, high-quality fabrics.
+            </p>
+          </div>
         </div>
         <div className="feature">
-          <Icon icon="hugeicons:package" className="feature-icon"/> {/* Replace with your actual icon */}
-          <h3 className="feature-title">Track Your Package</h3>
-          <p className="feature-description">Know Where Your Order Is - Instantly!</p>
+          <div className="feature-number">3.</div>
+          <div className="feature-text">
+            <h3 className="feature-title">Hassle-Free Returns</h3>
+            <p className="feature-description">
+              Shop worry-free with our easy & convenient return policy for complete peace of mind
+            </p>
+          </div>
         </div>
       </div>
     </div>

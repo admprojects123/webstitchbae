@@ -23,8 +23,7 @@ return (
                 </div>
                 <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="instagram-link">
                     <div className="instagram-link-content">
-                        <Icon icon="akar-icons:instagram-fill" className="instagram-icon" />
-                        <span className="instagram-link-text">"Stay Stylish, Stay Connected"</span>
+                        <span className="instagram-link-text">Stay updated with the latest trends, discover exclusive collections, get style inspiration, and be the first to know about special offers – follow us on Instagram @stichbae!</span>
                     </div>
                 </a>
             </div>

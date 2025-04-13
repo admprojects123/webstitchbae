@@ -88,7 +88,7 @@
 }
 
 .wishlistProductCard-add-to-cart {
-  background-color: #333;
+  background-color: #802E00;
   color: #fff;
   border: none;
   padding: 10px 15px;
@@ -97,6 +97,7 @@
   height: 40px;
   width: 100px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .wishlistProductCard-add-to-cart:hover {
@@ -113,6 +114,9 @@ height: 100%;
   }
   .wishlistProductCard-add-to-cart{
     margin-top: 10px;
+    width: 100%;
+    border-radius: 5px;
+    white-space: nowrap;
   }
 }
 .wishlistProductCard-price-button{

@@ -34,5 +34,7 @@
 
   .current-price{
     font-size: 1.09rem;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
+    color: #374151;
   }

@@ -56,6 +56,6 @@
   }
   
   .profileNavBar-item.active {
-    border-left: 2px solid #DA231D;
-    color: #DA231D; /* Change background color for active item */
+    border-bottom: 1px solid #802E00;
+    color: #802E00; /* Change background color for active item */
   }

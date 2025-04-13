@@ -16,7 +16,7 @@ const Product = ({ product ,onClick}) => {
       </div>
       <div className="product-details-home">
         <div className="product-name">{product.name}</div>
-        <div className="current-price">Rs. {product.price}</div>
+        <div className="current-price">₹ {product.price}</div>
          
         
       </div>

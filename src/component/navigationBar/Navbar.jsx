@@ -7,6 +7,7 @@ import './Navbar.css';
 import { domain } from '../../api.service';
 import {CartProduct,deleteCartItem} from './component/cartProducts/cartPrduct';
 import logo from '../../asset/logo.png';
+import stitchlogo from '../../asset/stitchlogo.png';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -128,7 +129,7 @@ const Navbar = () => {
 
                 {!isMobile && (
                     <Link to="/" className="navbar-logo">
-                        <img src={logo} alt="Iris Fashion Logo" className="navbar-logo-img" />
+                        <img src={stitchlogo} alt="Iris Fashion Logo" className="navbar-logo-img" />
                     </Link>
                 )}
 
@@ -171,7 +172,7 @@ const Navbar = () => {
                 <div className="drawer-inner">
                     <div className="drawer-logo">
                         <Link to="/" onClick={toggleDrawer}>
-                            <img src={logo} alt="Iris Fashion Logo" className="navbar-logo-img" />
+                            <img src={stitchlogo} alt="Iris Fashion Logo" className="navbar-logo-img" />
                         </Link>
                         <div className="drawer-close-btn" onClick={toggleDrawer}>
                             <Icon icon="ic:round-close" />

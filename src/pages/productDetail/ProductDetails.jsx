@@ -3,18 +3,19 @@ import './ProductDetails.css';
 import { Icon } from '@iconify/react';
 import { domain } from '../../api.service';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom'; // Assuming you are using React Router
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAlert } from '../../component/alert_popup/AlertContext';
 import ProductDisReview from './component/ProductDisReview';
+
 const ProductDetails = ({ match }) => {
-    const showAlert=useAlert().showAlert;
+    const showAlert = useAlert().showAlert;
     const [selectedSize, setSelectedSize] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
     const [product, setProduct] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const { productId } = useParams(); // Get product ID from URL params
+    const { productId } = useParams();
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -23,12 +24,11 @@ const ProductDetails = ({ match }) => {
             try {
                 const response = await fetch(`${domain}/product/getProductDetail/${productId}?viewProduct=true`, {
                     method: 'GET',
-
                 });
 
                 if (!response.ok) {
                     if (response.status === 401 || response.status === 403) {
-                        navigate('/login'); // Redirect to login if unauthorized
+                        navigate('/login');
                     } else {
                         throw new Error('Failed to fetch product details');
                     }
@@ -38,17 +38,14 @@ const ProductDetails = ({ match }) => {
 
                 if (data.status === 200) {
                     const productData = data.data;
-                    console.log(productData);
                     setProduct(data.data);
                     if (productData.sizes && productData.sizes.length > 0) {
                         const availableSizes = productData.sizes.filter(sizeObj => sizeObj.quantity > 0);
-
-// Set default selected size if available, otherwise set null
-setSelectedSize(availableSizes.length > 0 ? availableSizes[0].size : null);// Set the first size as default
+                        setSelectedSize(availableSizes.length > 0 ? availableSizes[0].size : null);
                     }
 
                     if (productData.colors && productData.colors.length > 0) {
-                        setSelectedColor(productData.colors[0]);  // Set the first color as default
+                        setSelectedColor(productData.colors[0]);
                     }
                 } else {
                     setError(data.message);
@@ -62,16 +59,15 @@ setSelectedSize(availableSizes.length > 0 ? availableSizes[0].size : null);// Se
     }, [productId, navigate]);
 
     async function handleAddToCart(path) {
-        // Retrieve userId from sessionStorage
-        showAlert("Please wait...")
+        showAlert("Please wait...");
         const userData = sessionStorage.getItem('userData');
         if (!userData) {
-            navigate('/login');  // Redirect to login if user data is not found
+            navigate('/login');
             showAlert('User not logged in');
             return;
         }
 
-        const { id: userId } = JSON.parse(userData);  // Extract userId from stored data
+        const { id: userId } = JSON.parse(userData);
 
         if (!userId || !selectedColor || !selectedSize || !product) {
             showAlert('Please select a color, size, and ensure the product details are loaded.');
@@ -80,10 +76,10 @@ setSelectedSize(availableSizes.length > 0 ? availableSizes[0].size : null);// Se
 
         try {
             const response = await axios.post(
-                `${domain}${path}`,  // Use the API endpoint for adding to cart
+                `${domain}${path}`,
                 {
-                    userId: userId,  // Use the userId retrieved from sessionStorage
-                    productId: product._id,  // Get productId from the fetched product details
+                    userId: userId,
+                    productId: product._id,
                     quantity: 1,
                     color: selectedColor,
                     size: selectedSize
@@ -95,11 +91,9 @@ setSelectedSize(availableSizes.length > 0 ? availableSizes[0].size : null);// Se
                 }
             );
 
-            // Update the cart state based on the API response
-
-            showAlert(response.data.message);  // Show success message
+            showAlert(response.data.message);
         } catch (error) {
-            navigate('/login');  // Redirect to login if unauthorized
+            navigate('/login');
             console.error("Error adding to cart:", error);
             showAlert('There was an issue adding the item to your cart. Please try again.');
         }
@@ -117,87 +111,111 @@ setSelectedSize(availableSizes.length > 0 ? availableSizes[0].size : null);// Se
         setSelectedSize(size);
     };
 
-    const handleColorChange = (event) => {
-        setSelectedColor(event.target.value);
+    const handleColorClick = (color) => {
+        setSelectedColor(color);
+    };
+
+    // Function to generate a hex color from a string
+    const stringToColor = (str) => {
+        if (str.toLowerCase() === 'white') return '#ffffff';
+        if (str.toLowerCase() === 'black') return '#000000';
+        if (str.toLowerCase() === 'red') return '#ff0000';
+        if (str.toLowerCase() === 'blue') return '#0000ff';
+        if (str.toLowerCase() === 'green') return '#008000';
+        if (str.toLowerCase() === 'yellow') return '#ffff00';
+        if (str.toLowerCase() === 'pink') return '#ffc0cb';
+        if (str.toLowerCase() === 'purple') return '#800080';
+        if (str.toLowerCase() === 'orange') return '#ffa500';
+        if (str.toLowerCase() === 'gray' || str.toLowerCase() === 'grey') return '#808080';
+        if (str.toLowerCase() === 'brown') return '#a52a2a';
+        
+        // For other colors, generate a consistent color from the string
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        let color = '#';
+        for (let i = 0; i < 3; i++) {
+            const value = (hash >> (i * 8)) & 0xFF;
+            color += ('00' + value.toString(16)).substr(-2);
+        }
+        return color;
     };
 
     return (
         <div className='root-product-container'>
-
-       
-        <div className="product-details-container">
-            <div className="product-details-left">
-                <div className="product-details-images">
-                    {product.images.map((image, index) => (
-                        <div
-                            key={index}
-                            className="product-details-image"
-                            style={{ backgroundImage: `url(${image})` }}
-                        ></div>
-                    ))}
-                </div>
-                {/* <div className="product-details-description">
-                    <div className="product-details-dis">Product Description</div>
-                    <p style={{ textAlign: "justify", color: "#212529d5", marginTop: "10px" }}>
-                        {product.description}
-                    </p>
-                </div> */}
-            </div>
-
-            <div className="product-details-right">
-                <div className="product-details-info">
-                    <h1 className="product-details-name">{product.name}</h1>
-
-                    <div className="product-details-price-parent">
-                        <div className="product-details-price">Rs. {product.price}</div>
-                        <div className="product-details-tax">Incl. of all Taxes</div>
+            <div className="product-details-container">
+                <div className="product-details-left">
+                    <div className="product-details-images">
+                        {product.images.map((image, index) => (
+                            <div
+                                key={index}
+                                className="product-details-image"
+                                style={{ backgroundImage: `url(${image})` }}
+                            ></div>
+                        ))}
                     </div>
+                </div>
 
-                    <div className="product-details-details">
-                        {/* <div><strong>Pattern</strong> - {product.pattern}</div>
-                        <div><strong>Fabric</strong> - {product.fabric}</div>
-                        <div><strong>Fit</strong> - {product.fit}</div> */}
+                <div className="product-details-right">
+                    <div className="product-details-info">
+                        <h1 className="product-details-name">{product.name}</h1>
+
+                        <div className="product-details-price-parent">
+                            <div className="product-details-price">₹ {product.price}</div>
+                            <div className="product-details-tax">Incl. of all Taxes</div>
+                        </div>
+
+                        <div className="product-details-details">
                         <div className="product-details-color-selection">
-                            <label><strong>Colour</strong></label>
-                            <select onChange={handleColorChange} value={selectedColor || ''} className="product-details-color-select">
-                                <option value="">Select Color</option>
-                                {product.colors.map((color) => (
-                                    <option key={color} value={color} className="product-details-option">
-                                        {color}
-                                    </option>
-                                ))}
-                            </select>
+    <label><strong>Colour</strong></label>
+    <div className="color-options-container">
+        {product.colors.map((color) => (
+            <div key={color} className="color-option-wrapper">
+                <div
+                    className={`color-option ${selectedColor === color ? 'selected' : ''}`}
+                    onClick={() => handleColorClick(color)}
+                    style={{ backgroundColor: stringToColor(color) }}
+                    title={color}
+                >
+                    {selectedColor === color && (
+                        <Icon icon="mdi:check" className="color-check-icon" />
+                    )}
+                </div>
+                <span className="color-name">{color}</span>
+            </div>
+        ))}
+    </div>
+</div>
                         </div>
-                    </div>
 
-                    <div className="product-details-size-selection">
-                        <p style={{ textAlign: "justify" }}><strong>Size</strong></p>
-                        <div className="product-details-sizes">
-                            {product.sizes
-                                .filter((sizeObj) => sizeObj.quantity > 0) // Only show sizes with quantity > 0
-                                .map((sizeObj) => (
-                                    <button
-                                        key={sizeObj._id}
-                                        className={`product-details-size-button ${selectedSize === sizeObj.size ? 'product-details-selected' : ''}`}
-                                        onClick={() => handleSizeClick(sizeObj.size)}
-                                    >
-                                        {sizeObj.size}
-                                    </button>
-                                ))}
+                        <div className="product-details-size-selection">
+                            <p style={{ textAlign: "justify" }}><strong>Size</strong></p>
+                            <div className="product-details-sizes">
+                                {product.sizes
+                                    .filter((sizeObj) => sizeObj.quantity > 0)
+                                    .map((sizeObj) => (
+                                        <button
+                                            key={sizeObj._id}
+                                            className={`product-details-size-button ${selectedSize === sizeObj.size ? 'product-details-selected' : ''}`}
+                                            onClick={() => handleSizeClick(sizeObj.size)}
+                                        >
+                                            {sizeObj.size}
+                                        </button>
+                                    ))}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="product-details-actions">
-                        <button className="product-details-add-to-cart" onClick={() => handleAddToCart("/user/addToCart")}>Add to Cart</button>
-                        {/* <button className="product-details-buy-now">Buy Now</button> */}
-                        <div className="product-details-add-to-wishlist" onClick={() => handleAddToCart("/user/addToWishlist")}>
-                            <Icon icon="mdi:heart-outline" /> Add to Wishlist
+                        <div className="product-details-actions">
+                            <button className="product-details-add-to-cart" onClick={() => handleAddToCart("/user/addToCart")}>Add to Cart</button>
+                            <div className="product-details-add-to-wishlist" onClick={() => handleAddToCart("/user/addToWishlist")}>
+                                <Icon icon="mdi:heart-outline" /> Add to Wishlist
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <ProductDisReview discription={product.description} productId={product._id} />
+            <ProductDisReview discription={product.description} productId={product._id} />
         </div>
     );
 };

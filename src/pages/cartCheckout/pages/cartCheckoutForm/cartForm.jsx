@@ -241,7 +241,7 @@ const CartForm = () => {
             className="cartform-checkout-btn"
             onClick={async() => {
               if (selectedAddressId) {
-                await handlePayment({ amounts: summary.totalAmount, cartItems: cartProducts, addressId: selectedAddressId,navigate: navigator,showAlert:alertContext.showAlert });
+                await ({ amounts: summary.totalAmount, cartItems: cartProducts, addressId: selectedAddressId,navigate: navigator,showAlert:alertContext.showAlert });
                 // Proceed with the selected address ID
                 // alert(`Selected Address ID: ${selectedAddressId}`);
                 // navigator("/sucess-order");

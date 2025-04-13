@@ -8,6 +8,8 @@ import Banner from './components/banner/Banner';
 import ProductGrid from './components/productsGrid/ProductGrid';
 import TestimonialSlider from './components/feedback/TestimonialSliderfeedback';
 import InstagramFollow from './components/socialMedia/InstagramFollow';
+import Categories from './components/Categories/category';
+import CollectionHighlight from './components/Collection/Collection';
 
 const Home = () => {
 
@@ -16,33 +18,31 @@ const Home = () => {
     <div className="home-container"> {/* Added a container for smooth transition */}
         
         <Banner/>
-      <Features />
+        <Categories/>
+      
       <div>
       <ProductGrid
-            title="Latest Arrivals"
+            title="Popular This Week"
             path="/home/latestArrivals"
-            description="Stay ahead of the fashion curve with our exclusive collection of fresh and stylish new arrivals"
+            description=""
             // products={dummyProducts}
         />
         <br/>
       <ProductGrid
-            title="Top Collections"
+            title="Best Seller"
             path="/home/topCollection"
-            description="Discover the perfect blend of style, comfort, and elegance in our collection."
+            description=""
             // products={dummyProducts}
         /></div>
 
 
         {/* banner */}
-        <div className='secBannerContainer'>
-       <div className='secBanner' style={{backgroundSize:"contain",backgroundPosition:"center",backgroundRepeat:"no-repeat"}}>
-
-       </div>
-       </div>
+      <CollectionHighlight/>
        
 
        <TestimonialSlider />
        <InstagramFollow />
+       <Features />
       
       {/* <Footer /> */}
     </div>

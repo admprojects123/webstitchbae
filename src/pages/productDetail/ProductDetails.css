@@ -1,9 +1,10 @@
-/* ProductDetails.css */
-.root-product-container{
-    height:100%;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+.root-product-container {
+    font-family: 'DM Sans', sans-serif;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    
 }
 
 .product-details-container {
@@ -14,7 +15,6 @@
     height: 100%;
     max-width: 100%;
     padding-top: 30px;
-    /* margin: 0 auto; */
 }
 
 .product-details-left {
@@ -45,24 +45,11 @@
     height: 25rem;
 }
 
-.product-details-description {
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
-.product-details-dis {
-    text-align: justify;
-    font-size: 1.2rem;
-    padding-bottom: 5px;
-    padding-top: 20px;
-    font-weight: 700;
-}
-
 .product-details-name {
     font-size: 1.7rem;
     font-weight: 500;
     padding-bottom: 5px;
-    font-family: 'Prompt';
+    font-family: 'DM Sans', sans-serif;
     margin: 0px;
     text-align: justify;
     color: #4b4a4a;
@@ -81,6 +68,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 5px;
+    font-family: 'DM Sans', sans-serif;
 }
 
 .product-details-tax {
@@ -96,13 +84,14 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
+    font-family: 'DM Sans', sans-serif;
 }
 
 .product-details-color-selection {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 10px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .product-details-color-selection label {
@@ -110,18 +99,51 @@
     font-weight: 500;
 }
 
-.product-details-color-selection select {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
+.color-options-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.color-option {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     cursor: pointer;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.selected {
+    border: 2px solid #000;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+
+.color-check-icon {
+    color: white;
+    font-size: 18px;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+}
+
+.selected-color-name {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
 }
 
 .product-details-size-selection {
     margin-bottom: 20px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 10px;
 }
 
@@ -135,31 +157,22 @@
 .product-details-size-button {
     padding: 10px 16px;
     border: 1px solid #ccc;
-    border-radius: 10px;
     cursor: pointer;
     background-color: white;
     font-weight: 500;
     transition: all 0.2s ease;
+    font-family: 'DM Sans', sans-serif;
 }
 
 .product-details-size-button:hover {
-    border-color: #DA231D;
+    border-color: #802E00;
 }
 
 .product-details-selected {
-    border-color: #DA231D;
-    background-color: #DA231D;
+    border-color: #802E00;
+    background-color: #802E00;
     font-weight: 500;
     color: white;
-}
-
-.product-details-size-chart-link {
-    display: block;
-    margin-top: 10px;
-    color: #007bff;
-    padding: 10px 0px;
-    text-decoration: none;
-    font-size: 0.9rem;
 }
 
 .product-details-actions {
@@ -171,35 +184,36 @@
 
 .product-details-actions button {
     padding: 12px 20px;
-    /* border: none; */
-    border-radius: 8px;
-    /* color: white; */
-    font-weight: 600;
+    border-radius: 4px;
+    font-weight: 400;
     cursor: pointer;
-    /* transition: background-color 0.3s ease; */
 }
 
 .product-details-add-to-cart {
-    background-color: #000000;
+    background-color: #802E00;
     color: white;
-   
-}
-
-.product-details-buy-now {
-    background-color: transparent;
-    border: 1px solid #000000;
-    color: black;
+    border: none;
 }
 
 .product-details-add-to-wishlist {
     background-color: transparent;
     color: #2a2b2b;
     cursor: pointer;
-  
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    justify-content: center;
 }
 
 .product-details-actions button:hover {
     opacity: 0.8;
+}
+
+.product-details-info {
+    width: 100%;
 }
 
 /* Responsive design */
@@ -224,42 +238,53 @@
         width: 100%;
     }
 }
-/* Enhanced Dropdown Styling */
-.product-details-color-select {
-    padding: 10px 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #333;
-    background-color: white;
+
+
+
+
+.color-options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.color-option-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
-    appearance: none; /* Remove default arrow */
-   
-   
 }
 
-.product-details-color-select:hover {
-    border-color: #DA231D;
+.color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-.product-details-color-select:focus {
-    border-color: #DA231D;
-    
-    outline: none;
+.color-option.selected {
+    border-color: #000;
+    box-shadow: 0 0 0 1px #fff inset;
 }
 
-.product-details-option {
-    padding: 8px 12px;
-    font-size: 1rem;
+.color-name {
+    font-size: 0.9rem;
     color: #333;
-    background-color: white;
+    text-transform: capitalize;
 }
 
-.product-details-option:hover {
-    background-color: #f5f5f5;
+.color-option:hover {
+    transform: scale(1.1);
 }
 
-.product-details-info{
-    width: 100%;
+.color-check-icon {
+    color: white;
+    font-size: 16px;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
 }

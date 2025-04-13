@@ -4,7 +4,7 @@
     height: 60vh; /* Adjust height to 50% of the viewport height */
     background-size: cover;
     background-position: center;
-    background-image: url('/src/asset/homebanner.png');
+    background-image: url('/src/asset/stitchbanner.png');
     display: flex;
     align-items: center; /* Vertically center content */
     justify-content: center; /* Horizontally center content */

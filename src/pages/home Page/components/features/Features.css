@@ -1,63 +1,69 @@
-/* Features.css */
-.features-container {
-    background-color: transparent; /* Light gray background */
-    padding: 40px 20px; /* Adjust padding as needed */
-  }
-  
-  .features-content {
-    display: flex;
-    justify-content: space-around; /* Distribute features evenly */
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-      gap: 20px;
-  }
-  
-  .feature {
-    text-align: center;
-    padding: 20px;
-    flex: 1 1 300px; /* Distribute features evenly and set a minimum width */
-  }
-  
-  .feature-icon {
-    font-size: 3em; /* Adjust icon size */
-    margin-bottom: 10px;
-      color: #333;
-  }
-  
-  .feature-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .feature-description {
-    font-size: 0.9em;
-    color: #666; /* Slightly darker text for description */
-  }
-  
-  /* Responsive adjustments for mobile */
-  @media (max-width: 768px) { /* Adjust breakpoint as needed */
-    .features-content {
-      flex-direction: row; /* Stack features vertically */
-        align-items: unset;
-        gap: 10px;
-    }
-    .feature-icon {
-      font-size: 2em; /* Adjust icon size */
-      margin-bottom: 0px;
-        color: #333;
-    }
-    .feature-title {
-      font-size: 12px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-      .feature{
-          flex: 1;
-          padding: 0px;
-      }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
-      .feature-description {
-        font-size: 0.7em;}
+.features-container {
+  background-color: white;
+  padding: 60px 20px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.features-content {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+}
+
+.feature {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+}
+
+.feature-number {
+  font-size: 1.6em;
+  font-weight: 700;
+  color: #612100;
+  min-width: 20px;
+  padding-top: 10px;
+}
+
+.feature-text {
+  text-align: left;
+  max-width: 300px;
+}
+
+.feature-title {
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #000;
+}
+
+.feature-description {
+  font-size: 0.8em;
+  color: #555;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .features-content {
+    flex-direction: column;
+    gap: 20px;
   }
+
+  .feature-title {
+    font-size: 0.95em;
+  }
+
+  .feature-description {
+    font-size: 0.75em;
+  }
+
+  .feature-number {
+    font-size: 1.4em;
+    justify-content: center;
+  }
+}
