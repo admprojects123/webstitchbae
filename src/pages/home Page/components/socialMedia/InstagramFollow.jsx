@@ -4,10 +4,10 @@ import './InstagramFollow.css';
 import { Icon } from '@iconify/react';
 
 // Import your images (replace with your actual image paths)
-import image1 from '../../../../asset/test/product1.png';
-import image2 from '../../../../asset/test/product2.png';
-import image3 from '../../../../asset/test/product3.png';
-import image4 from '../../../../asset/test/product1.png';
+import image1 from '../../../../asset/alcohealu1.png';
+import image2 from '../../../../asset/addictedtohust1.png';
+import image3 from '../../../../asset/everythingstartswith.png';
+import image4 from '../../../../asset/hearttank.png';
 
 const InstagramFollow = () => {
 const handleImageClick = (imageSrc) => {
