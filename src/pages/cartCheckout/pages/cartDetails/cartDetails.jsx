@@ -14,12 +14,11 @@ const CartDetails = () => {
     tax: 0,
     totalAmount: 0,
   });
-
   const fetchCart = async () => {
     const token = sessionStorage.getItem('authToken');
     const userData = JSON.parse(sessionStorage.getItem('userData'));
     const userId = userData ? userData.id : '';
-
+  
     if (userId) {
       try {
         const response = await fetch(`${domain}/user/getCartProduct/${userId}`, {
@@ -27,37 +26,39 @@ const CartDetails = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
         if (!response.ok) {
           throw new Error('Failed to fetch cart items');
         }
-
+  
         const data = await response.json();
-
+  
         if (data && data.cart) {
-          const processedItems = data.cart.map(item => ({
-            id: item._id,
-            productId: item.productId._id,
-            name: item.productId.name,
-            price: item.productId.price,
-            size: item.size,
-            color: item.color,
-            quantity: item.quantity,
-            image: item.productId.images[0],
-          }));
-
+          const processedItems = data.cart
+            .filter(item => item.productId) // Ensure productId is present
+            .map(item => ({
+              id: item._id,
+              productId: item.productId._id, // Now safe to access
+              name: item.productId.name,
+              price: item.productId.price,
+              size: item.size,
+              color: item.color,
+              quantity: item.quantity,
+              image: item.productId.images[0], // Assuming at least one image exists
+            }));
+  
           setCartItems(processedItems);
         }
       } catch (error) {
-        console.error(error);
-        navigate('/login');
+        console.error('Error fetching cart:', error);
+        navigate('/login'); // Redirect to login on error
       }
     } else {
       console.error('User ID not found in session storage');
       navigate('/login');
     }
   };
-
+  
   useEffect(() => {
     fetchCart();
   }, [navigate]);

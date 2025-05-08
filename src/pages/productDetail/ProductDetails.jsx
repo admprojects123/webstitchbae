@@ -13,6 +13,8 @@ const ProductDetails = ({ match }) => {
     const [selectedColor, setSelectedColor] = useState(null);
     const [product, setProduct] = useState(null);
     const [error, setError] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
     const navigate = useNavigate();
 
     const { productId } = useParams();
@@ -57,6 +59,17 @@ const ProductDetails = ({ match }) => {
 
         fetchProductDetails();
     }, [productId, navigate]);
+
+    const openImagePopup = (image) => {
+        setSelectedImage(image);
+        setIsImagePopupOpen(true);
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+    };
+
+    const closeImagePopup = () => {
+        setIsImagePopupOpen(false);
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    };
 
     async function handleAddToCart(path) {
         showAlert("Please wait...");
@@ -115,7 +128,6 @@ const ProductDetails = ({ match }) => {
         setSelectedColor(color);
     };
 
-    // Function to generate a hex color from a string
     const stringToColor = (str) => {
         if (str.toLowerCase() === 'white') return '#ffffff';
         if (str.toLowerCase() === 'black') return '#000000';
@@ -129,7 +141,6 @@ const ProductDetails = ({ match }) => {
         if (str.toLowerCase() === 'gray' || str.toLowerCase() === 'grey') return '#808080';
         if (str.toLowerCase() === 'brown') return '#a52a2a';
         
-        // For other colors, generate a consistent color from the string
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -144,6 +155,23 @@ const ProductDetails = ({ match }) => {
 
     return (
         <div className='root-product-container'>
+            {/* Image Popup */}
+            {isImagePopupOpen && (
+                <div className="image-popup-overlay">
+                    <div className="image-popup-container">
+                        <button className="close-popup-button" onClick={closeImagePopup}>
+                            <Icon icon="mdi:close" />
+                        </button>
+                        <img 
+                            src={selectedImage} 
+                            alt="Product" 
+                            className="popup-image" 
+                            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking image
+                        />
+                    </div>
+                </div>
+            )}
+
             <div className="product-details-container">
                 <div className="product-details-left">
                     <div className="product-details-images">
@@ -152,6 +180,7 @@ const ProductDetails = ({ match }) => {
                                 key={index}
                                 className="product-details-image"
                                 style={{ backgroundImage: `url(${image})` }}
+                                onClick={() => openImagePopup(image)}
                             ></div>
                         ))}
                     </div>
@@ -167,26 +196,26 @@ const ProductDetails = ({ match }) => {
                         </div>
 
                         <div className="product-details-details">
-                        <div className="product-details-color-selection">
-    <label><strong>Colour</strong></label>
-    <div className="color-options-container">
-        {product.colors.map((color) => (
-            <div key={color} className="color-option-wrapper">
-                <div
-                    className={`color-option ${selectedColor === color ? 'selected' : ''}`}
-                    onClick={() => handleColorClick(color)}
-                    style={{ backgroundColor: stringToColor(color) }}
-                    title={color}
-                >
-                    {selectedColor === color && (
-                        <Icon icon="mdi:check" className="color-check-icon" />
-                    )}
-                </div>
-                <span className="color-name">{color}</span>
-            </div>
-        ))}
-    </div>
-</div>
+                            <div className="product-details-color-selection">
+                                <label><strong>Colour</strong></label>
+                                <div className="color-options-container">
+                                    {product.colors.map((color) => (
+                                        <div key={color} className="color-option-wrapper">
+                                            <div
+                                                className={`color-option ${selectedColor === color ? 'selected' : ''}`}
+                                                onClick={() => handleColorClick(color)}
+                                                style={{ backgroundColor: stringToColor(color) }}
+                                                title={color}
+                                            >
+                                                {selectedColor === color && (
+                                                    <Icon icon="mdi:check" className="color-check-icon" />
+                                                )}
+                                            </div>
+                                            <span className="color-name">{color}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
 
                         <div className="product-details-size-selection">

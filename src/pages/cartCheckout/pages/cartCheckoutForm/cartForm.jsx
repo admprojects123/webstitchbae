@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./cartForm.css";
 import { domain } from "../../../../api.service";
-import { rootSummary ,cartProducts} from "../../component/cartSummary/cartSummary";
+import { rootSummary, cartProducts } from "../../component/cartSummary/cartSummary";
 import AddressList from "../savedAddressList/addressList";
 import handlePayment from "../../../../component/razorpay/razorpayCom";
 import { useAlert } from "../../../../component/alert_popup/AlertContext";
 
 const CartForm = () => {
-  
   const navigator = useNavigate();
   const location = useLocation();
   const summary = rootSummary;
@@ -28,8 +27,10 @@ const CartForm = () => {
 
   const [userAddresses, setUserAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null); // Track only the selected address ID
-  const [isAddressFormVisible, setAddressFormVisibility] = useState(false);
-  const alertContext=useAlert()
+  const [isAddressFormVisible, setAddressFormVisibility] = useState(false); // Control address form visibility
+  const alertContext = useAlert();
+
+  // Prevent page reload
   const PreventReload = () => {
     useEffect(() => {
       const handleBeforeUnload = (e) => {
@@ -38,10 +39,10 @@ const CartForm = () => {
         e.returnValue = message; // Standard for most browsers
         return message; // Some browsers use this return value
       };
-  
+
       // Add event listener
       window.addEventListener("beforeunload", handleBeforeUnload);
-  
+
       // Cleanup the event listener when the component unmounts
       return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -49,9 +50,10 @@ const CartForm = () => {
     }, []);
   };
   PreventReload();
+
+  // Fetch user addresses on initial load
   useEffect(() => {
     fetchUserAddresses();
-  
   }, []);
 
   const fetchUserAddresses = async () => {
@@ -74,20 +76,17 @@ const CartForm = () => {
       });
 
       const data = await response.json();
-  
- 
-      if(data.addresses.length > 0){
-        console.log("Address found");
-        setAddressFormVisibility(true);
-      }
-      console.log(data);
+
+      console.log("Fetched user addresses:", data);
+
       if (data.success && data.addresses.length > 0) {
         setUserAddresses(data.addresses);
         const defaultAddress = data.addresses.find((address) => address.isDefault);
-            //  console.log("selectedAddressId",defaultAddress);
-      setSelectedAddressId(defaultAddress._id );
+        setSelectedAddressId(defaultAddress?._id); // Set the default address if available
+        setAddressFormVisibility(true); // Show saved addresses if available
       } else {
         setUserAddresses([]);
+        setAddressFormVisibility(false); // If no saved addresses, show the form
       }
     } catch (error) {
       console.error("Error fetching addresses:", error);
@@ -142,7 +141,7 @@ const CartForm = () => {
   };
 
   const handleSelectAddress = (addressId) => {
-    setSelectedAddressId(addressId); // Set only the address ID
+    setSelectedAddressId(addressId); // Set the selected address ID
   };
 
   return (
@@ -164,7 +163,7 @@ const CartForm = () => {
       </div>
 
       <div className="cartform-form-container">
-        {isAddressFormVisible ? (
+        {isAddressFormVisible && userAddresses.length > 0 ? (
           <div className="cartform-saved-addresses">
             <h2>Saved Addresses</h2>
             <AddressList
@@ -182,32 +181,99 @@ const CartForm = () => {
             >
               <h2>Contact Information</h2>
               <div className="cartform-form-group">
-                <input type="text" name="firstName" placeholder="First Name" className="cartform-input-field" value={addressData.firstName} onChange={handleChange} />
-                <input type="text" name="lastName" placeholder="Last Name" className="cartform-input-field" value={addressData.lastName} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  className="cartform-input-field"
+                  value={addressData.firstName}
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  className="cartform-input-field"
+                  value={addressData.lastName}
+                  onChange={handleChange}
+                />
               </div>
               <div style={{ display: "flex", flexDirection: "column" }} className="cartform-form-group">
-                <input type="text" name="phoneNumber" placeholder="Phone Number" className="cartform-input-field cartform-phone-email-input" value={addressData.phoneNumber} onChange={handleChange} />
-                <input type="email" name="email" placeholder="Email Address" className="cartform-input-field cartform-phone-email-input" value={addressData.email} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  placeholder="Phone Number"
+                  className="cartform-input-field cartform-phone-email-input"
+                  value={addressData.phoneNumber}
+                  onChange={handleChange}
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  className="cartform-input-field cartform-phone-email-input"
+                  value={addressData.email}
+                  onChange={handleChange}
+                />
               </div>
 
               <h2>Shipping Address</h2>
               <div className="cartform-form-group">
-                <input type="text" name="streetAddress" placeholder="Address" className="cartform-input-field" value={addressData.streetAddress} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="streetAddress"
+                  placeholder="Address"
+                  className="cartform-input-field"
+                  value={addressData.streetAddress}
+                  onChange={handleChange}
+                />
               </div>
               <div style={{ display: "flex", flexDirection: "column" }} className="cartform-form-group">
-                <select name="country" className="cartform-input-field" value={addressData.country} onChange={handleChange}>
+                <select
+                  name="country"
+                  className="cartform-input-field"
+                  value={addressData.country}
+                  onChange={handleChange}
+                >
                   <option value="">Country</option>
                   <option value="India">India</option>
                   <option value="USA">USA</option>
                 </select>
-                <input type="text" name="state" placeholder="State" className="cartform-input-field cartform-state-input" value={addressData.state} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="state"
+                  placeholder="State"
+                  className="cartform-input-field cartform-state-input"
+                  value={addressData.state}
+                  onChange={handleChange}
+                />
               </div>
               <div className="cartform-form-group">
-                <input type="text" name="townCity" placeholder="City" className="cartform-input-field" value={addressData.townCity} onChange={handleChange} />
-                <input type="text" name="zipCode" placeholder="Pin Code" className="cartform-input-field" value={addressData.zipCode} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="townCity"
+                  placeholder="City"
+                  className="cartform-input-field"
+                  value={addressData.townCity}
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  name="zipCode"
+                  placeholder="Pin Code"
+                  className="cartform-input-field"
+                  value={addressData.zipCode}
+                  onChange={handleChange}
+                />
               </div>
               <div style={{ display: "flex", flexDirection: "row" }} className="cartform-form-group">
-                <input type="checkbox" id="cartform-setDefault" name="isDefault" checked={addressData.isDefault} onChange={handleChange} />
+                <input
+                  type="checkbox"
+                  id="cartform-setDefault"
+                  name="isDefault"
+                  checked={addressData.isDefault}
+                  onChange={handleChange}
+                />
                 <label htmlFor="cartform-setDefault">Set as Default Address</label>
               </div>
 
@@ -239,9 +305,15 @@ const CartForm = () => {
           </ul>
           <button
             className="cartform-checkout-btn"
-            onClick={async() => {
+            onClick={async () => {
               if (selectedAddressId) {
-                await ({ amounts: summary.totalAmount, cartItems: cartProducts, addressId: selectedAddressId,navigate: navigator,showAlert:alertContext.showAlert });
+                await handlePayment({
+                  amounts: summary.totalAmount,
+                  cartItems: cartProducts,
+                  addressId: selectedAddressId,
+                  navigate: navigator,
+                  showAlert: alertContext.showAlert,
+                });
                 // Proceed with the selected address ID
                 // alert(`Selected Address ID: ${selectedAddressId}`);
                 // navigator("/sucess-order");

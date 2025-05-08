@@ -282,3 +282,38 @@
 .popupButtons .cancelButton:hover {
   background-color: #555;
 }
+
+
+/* Description Content */
+.descriptionContent {
+  text-align: start;
+  width: 100%;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.descriptionContent p {
+  margin: 8px 0;
+}
+
+/* For bullet points if description contains them */
+.descriptionContent ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.descriptionContent li {
+  margin-bottom: 4px;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+  .descriptionContent {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .descriptionContent p {
+    margin: 6px 0;
+  }
+}

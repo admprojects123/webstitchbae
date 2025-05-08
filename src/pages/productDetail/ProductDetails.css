@@ -288,3 +288,74 @@
     font-size: 16px;
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
 }
+
+
+/* Image Popup Styles */
+.image-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.image-popup-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    width: auto;
+    height: auto;
+}
+
+.popup-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.close-popup-button {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .image-popup-container {
+        max-width: 95%;
+        max-height: 95%;
+    }
+    
+    .popup-image {
+        max-height: 70vh;
+    }
+    
+    .close-popup-button {
+        top: -35px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Make sure product images are clickable */
+.product-details-image {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.product-details-image:hover {
+    transform: scale(1.02);
+}

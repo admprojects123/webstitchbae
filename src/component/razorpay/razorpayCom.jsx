@@ -38,10 +38,10 @@ console.log(orderResponse.data)
 
     // Step 2: Initialize Razorpay payment
     const options = {
-      key: 'rzp_test_QoS81L72u1J300',  // Replace with your Razorpay key
+      key: 'rzp_test_0NvZR3weubP2f7',  // Replace with your Razorpay key
       amount: parseFloat(amounts)*100,
       currency: 'INR',
-      name: 'Iris Women Clothing',
+      name: 'Stitch',
       description: 'Test Transaction',
       image: 'https://res.cloudinary.com/dmaoweleq/image/upload/v1738147419/lgo_ys4t0z.png',
       order_id: razorpayOrderId,

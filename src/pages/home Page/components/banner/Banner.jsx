@@ -7,15 +7,12 @@ const Banner = ({}) => {
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-    // Fetch the image URL from the API
     const fetchBannerImage = async () => {
       try {
         const response = await fetch(`${domain}/user/banner`);
         const data = await response.json();
         if (data.url) {
           setImageUrl(data.url);
-        } else {
-          console.error('Image URL not found in response');
         }
       } catch (error) {
         console.error('Error fetching banner image:', error);
@@ -26,15 +23,15 @@ const Banner = ({}) => {
   }, []);
 
   return (
-    <div
-      className="banner-container"
-      style={{
-        backgroundImage: imageUrl ? `url(${imageUrl})` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-
+    <div className="banner-container">
+      {imageUrl && (
+        <img 
+          src={imageUrl} 
+          alt="Banner" 
+          className="banner-image"
+          onError={() => setImageUrl('')}
+        />
+      )}
     </div>
   );
 };

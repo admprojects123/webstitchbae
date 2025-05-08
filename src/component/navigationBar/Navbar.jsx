@@ -35,51 +35,68 @@ const Navbar = () => {
         { label: 'About Us', path: '/about-us' },
         { label: 'Contact Us', path: '/contact-us' },
     ];
+
     const fetchCart = async () => {
-        const token = sessionStorage.getItem('authToken'); // Get token from sessionStorage
-        const userData = JSON.parse(sessionStorage.getItem('userData')); // Parse user data
-        const userId = userData ? userData.id : ''; // Extract userId from sessionStorage
-
-        if (userId) {
-            try {
-                const response = await fetch(`${domain}/user/getCartProduct/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Pass token in header for authentication
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch wishlist'); // Throw error if response is not ok
-                }
-
-                const data = await response.json();
-                console.log(data);
-
-                if (data && data.cart) {
-                    // Process wishlist items
-                    const processedItems = data.cart.map(item => ({
-                        id: item._id,
-                        productId: item.productId._id,
-                        name: item.productId.name,
-                        price: item.productId.price,
-                        size: item.size,
-                        color: item.color,
-                        quantity: item.quantity,
-                        image: item.productId.images[0], // Assuming the first image is the main one
-                    }));
-
-                    setCartItems(processedItems); // Set the processed wishlist items to state
-                    console.log("------",cartItems);
-                }
-            } catch (error) {
-                console.error(error);
-                navigate('/login'); // Redirect to login page on error
-            }
-        } else {
-            console.error('User ID not found in session storage');
-           
+        try {
+          // Retrieve token and user data from session storage
+          const token = sessionStorage.getItem('authToken');
+          const userData = JSON.parse(sessionStorage.getItem('userData'));
+      
+          // Check if userData or user ID is missing
+          if (!userData || !userData.id) {
+            console.error('User not logged in or user data is missing.');
+            navigate('/login');
+            return;
+          }
+      
+          const userId = userData.id;
+      
+          // Make API call to fetch cart products
+          const response = await fetch(`${domain}/user/getCartProduct/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Failed to fetch cart products: ${response.status}`);
+          }
+      
+          const data = await response.json();
+          console.log("Cart API response:", data);
+      
+          // Ensure 'cart' exists and is an array
+          if (!data || !Array.isArray(data.cart)) {
+            console.warn('Unexpected cart structure or empty cart.');
+            setCartItems([]);
+            return;
+          }
+      
+          // Map cart items, filter invalid product references
+          const processedItems = data.cart
+            .filter(item => item && item.productId) // Ensure product exists
+            .map(item => ({
+              id: item._id,
+              productId: item.productId._id,
+              name: item.productId.name || 'Unnamed Product',
+              price: item.productId.price || 0,
+              size: item.size || 'N/A',
+              color: item.color || 'N/A',
+              quantity: item.quantity || 1,
+              image: item.productId.images?.[0] || '', // Use empty string if no image
+            }));
+      
+          // Set cart state
+          setCartItems(processedItems);
+          console.log("Processed cart items:", processedItems);
+      
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+          navigate('/login');
         }
-    };
+      };
+      
+     
     useEffect(() => {
         fetchCart(); // Fetch wishlist items on component mount
     }, []);

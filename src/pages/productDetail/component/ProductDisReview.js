@@ -173,11 +173,15 @@ const ProductDisReview = ({ productId, discription }) => {
 
       {/* Description Section */}
       {activeTab === "description" && (
-        <div className={styles.descriptionSection}>
-          <h2 style={{ margin: "0px" }}>Description</h2>
-          <p style={{ textAlign: "start" }}>{discription}</p>
-        </div>
-      )}
+  <div className={styles.descriptionSection}>
+    <h2 style={{ margin: "0px" }}>Description</h2>
+    <div className={styles.descriptionContent}>
+      {discription.split('\n').map((paragraph, index) => (
+        paragraph.trim() ? <p key={index}>{paragraph.trim()}</p> : null
+      ))}
+    </div>
+  </div>
+)}
 
       {/* Reviews Section */}
       {activeTab === "reviews" && (
