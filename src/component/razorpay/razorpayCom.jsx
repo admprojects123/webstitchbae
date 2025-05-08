@@ -3,65 +3,72 @@ import axios from 'axios';
 import { domain } from '../../api.service';
 // import { useNavigate } from 'react-router-dom';
 
-async function handlePayment ({ amounts,cartItems,addressId,navigate,showAlert })  {
-   
+async function handlePayment({ amounts, cartItems, addressId, navigate, showAlert }) {
   try {
     // Get the token and user data from sessionStorage
     const token = sessionStorage.getItem('authToken');
     const userData = JSON.parse(sessionStorage.getItem('userData'));
     const userId = userData ? userData.id : '';
 
-    // Step 1: Create an order from your backend
-    const data={
-        userId,  
-        totalPrice: amounts , 
-        productDetails:cartItems,
-        addressId,
-      }
-      console.log(data);
+    // Ensure the amount is an integer rupee value only (discard decimals)
+    const totalPrice = parseInt(amounts); // e.g. '156.75' -> 156
+    const amountInPaise = totalPrice * 100; // Razorpay accepts integer in paise
+
+    // Prepare order data
+    const data = {
+      userId,
+      totalPrice, // Send to backend in rupees
+      productDetails: cartItems,
+      addressId,
+      paymentMethod: 'credit_card',
+    };
+
+    console.log('Order Data:', data);
+
+    // Step 1: Create order on backend
     const orderResponse = await axios.post(
-      `${domain}/user/create-order`, 
+      `${domain}/user/create-order`,
       data,
       {
         headers: {
-          Authorization: `Bearer ${token}`,  // Add the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       }
     );
 
-    const { razorpayOrderId,orderId } = orderResponse.data;
-console.log(orderResponse.data)
+    const { razorpayOrderId, orderId } = orderResponse.data;
+    console.log('Order Response:', orderResponse.data);
+
     if (!razorpayOrderId) {
       showAlert("Failed to create an order. Please try again.");
       return;
     }
 
-    // Step 2: Initialize Razorpay payment
+    // Step 2: Razorpay configuration
     const options = {
-      key: 'rzp_test_0NvZR3weubP2f7',  // Replace with your Razorpay key
-      amount: parseFloat(amounts)*100,
+      key: 'rzp_test_0NvZR3weubP2f7',
+      amount: amountInPaise, // Always integer
       currency: 'INR',
       name: 'Stitch',
-      description: 'Test Transaction',
+      description: 'Order Payment',
       image: 'https://res.cloudinary.com/dmaoweleq/image/upload/v1738147419/lgo_ys4t0z.png',
       order_id: razorpayOrderId,
       handler: async (response) => {
         const paymentData = {
-            userId,
-         orderId,
+          userId,
+          orderId,
           razorpayPaymentId: response.razorpay_payment_id,
           razorpayOrderId: response.razorpay_order_id,
           razorpaySignature: response.razorpay_signature,
         };
 
-        // Step 4: Verify payment and save the order in MongoDB
         try {
           const result = await axios.post(
-            `${domain}/user/verify-payment`, 
-            paymentData, 
+            `${domain}/user/verify-payment`,
+            paymentData,
             {
               headers: {
-                Authorization: `Bearer ${token}`,  // Add the token in the headers
+                Authorization: `Bearer ${token}`,
               },
             }
           );
@@ -87,20 +94,20 @@ console.log(orderResponse.data)
       },
     };
 
-    // Step 3: Open the Razorpay payment modal
+    // Step 3: Open Razorpay modal
     const razorpayInstance = new window.Razorpay(options);
     razorpayInstance.open();
 
-    // Handle payment failure explicitly
+    // Step 4: Handle failure
     razorpayInstance.on('payment.failed', (response) => {
       console.error('Payment Failed:', response.error);
       showAlert(`Payment Failed. Reason: ${response.error.description}`);
     });
 
   } catch (error) {
-    console.error('Payment error:', error.response.data.error);
-    showAlert(error.response.data.error);
+    console.error('Payment error:', error?.response?.data?.error || error.message);
+    showAlert(error?.response?.data?.error || 'An unexpected error occurred');
   }
-};
+}
 
 export default handlePayment;
