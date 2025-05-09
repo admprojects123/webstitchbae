@@ -66,7 +66,7 @@ const ContactUs = () => {
     return (
         <div className="contact-us-container">
             <div className="contact-content">
-                <h1>Contact Us</h1>
+                <h1>Contact@stitchbae.com</h1>
                 <p>Use our contact form for inquiries, and we'll get back to you as soon as possible.</p>
                 <form onSubmit={handleSubmit}>
                     <div className="form-row">

@@ -1,7 +1,8 @@
 // Footer.jsx
 import React from 'react';
 import './Footer.css';
-import { Link } from 'react-router-dom'; // Import Link for internal navigation
+import { Link } from 'react-router-dom';
+import { FaInstagram } from 'react-icons/fa'; // Import Instagram icon
 
 const Footer = () => {
   return (
@@ -9,8 +10,8 @@ const Footer = () => {
       <div className="footer-columns">
         <div className="footer-section">
           <h4>CONTACT US</h4>
-          <p>+91 8298298298</p>
-          <p>Email Us</p>
+          <p>+91 9923446236</p>
+          <p>info@stitchbae.com</p>
           <p>Mon–Fri 9am-3pm PT</p>
         </div>
 
@@ -32,6 +33,14 @@ const Footer = () => {
 
       <div className="footer-bottom">
         <p>@Stitchbein</p>
+        <a
+          href="https://www.instagram.com/wearstitchbae"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="instagram-link"
+        >
+          <FaInstagram className="instagram-icon" />
+        </a>
       </div>
     </footer>
   );

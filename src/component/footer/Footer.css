@@ -91,3 +91,46 @@
     text-align: center;
   }
 }
+
+
+.instagram-link {
+  margin-left: 1rem;
+  color: #555;
+  font-size: 1.4rem;
+  transition: color 0.3s;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.instagram-link:hover {
+  color: #000;
+}
+
+.footer-bottom {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-top: 1px solid #ddd;
+  padding-top: 1rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .footer-columns {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+
+  .instagram-link {
+    margin-left: 0;
+  }
+}
